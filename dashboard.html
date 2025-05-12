@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gameroom - dashboard </title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Gameroom</div>
+        <div class="nav-links">
+            <a href="./stock.html" class="active">STOCK</a>
+            <a href="./history.html">HISTORY</a>
+            <a href="./shop.html">SHOP</a>
+            <a href="./config.html">CONFIG</a>
+          
+        </div>
+        <div class="user-info">
+            <span id="username-display"></span>
+            <button onclick="logout()" class="logout-btn">→</button>
+        </div>
+    </nav>
+
+    <div class="action-buttons-container">
+        <button onclick="openEndDayPopup()" class="end-day-btn">End Day</button>
+        <button onclick="openEditBalancePopup()" class="edit-btn">Edit</button>
+    </div>
+
+    <div class="main-content">
+        <div class="balance-section">
+            <p style="margin-top: 10px; color: blue">cash</p>
+            <div class="balance-item" id="cash-balance">₾ 0.00</div>
+            <p style="margin-top: 10px; color: blue">card</p>
+            <div class="balance-item" id="card-balance">₾ 0.00</div>
+            <div class="balance-item" id="total-balance">Total: ₾ 0.00</div>
+        </div>
+
+        <div class="categories">
+            <!-- VIP section -->
+            <h2 class="category-title">VIP</h2>
+            <div class="card-grid">
+                <div class="grid-item">
+                    <p>1</p>
+                    <div class="card" data-card-id="1">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIP Premium section -->
+            <h2 class="category-title">VIP Premium</h2>
+            <div class="card-grid">
+                <div class="grid-item">
+                    <p>2</p>
+                    <div class="card" data-card-id="2">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PS5 section -->
+            <h2 class="category-title">PS5</h2>
+            <div class="card-grid">
+                <div class="grid-item">
+                    <p>3</p>
+                    <div class="card" data-card-id="3">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <p>4</p>
+                    <div class="card" data-card-id="4">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <p>5</p>
+                    <div class="card" data-card-id="5">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- საჭე section -->
+            <h2 class="category-title">საჭე</h2>
+            <div class="card-grid">
+                <div class="grid-item">
+                    <p>6</p>
+                    <div class="card" data-card-id="6">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <p>7</p>
+                    <div class="card" data-card-id="7">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <p>8</p>
+                    <div class="card" data-card-id="8">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <p>9</p>
+                    <div class="card" data-card-id="9">
+                        <div class="add-button" onclick="showPopup(this)">+</div>
+                        <div class="plus-button" onclick="openShopWindow(this)">+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rest of the popup code remains exactly the same -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+    <div class="popup" id="popup">
+        <h2>Select Rental Type</h2>
+        <div class="form-group">
+            <label>Rental Type:</label>
+            <select id="rentalType" onchange="updatePrice()"></select>
+        </div>
+        <div class="form-group">
+            <label for="timeInput">Time Duration:</label>
+            <div class="time-input-container">
+                <input type="text" id="timeInput" class="time-input" placeholder="HH:MM" oninput="handleTimeInput()" onfocus="showTimeDropdown()">
+                <div class="time-dropdown" id="timeDropdown">
+                    <div class="time-option" onclick="selectTimeOption('0:30')">0:30</div>
+                    <div class="time-option" onclick="selectTimeOption('1:00')">1:00</div>
+                    <div class="time-option" onclick="selectTimeOption('2:00')">2:00</div>
+                    <div class="time-option" onclick="selectTimeOption('3:00')">3:00</div>
+                    <div class="time-option" onclick="selectTimeOption('4:00')">4:00</div>
+                    <div class="time-option" onclick="selectTimeOption('5:00')">5:00</div>
+                    <div class="time-option" onclick="selectTimeOption('6:00')">6:00</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Hourly Price:</label>
+            <input type="text" id="hourlyPrice" value="0.00₾" readonly>
+        </div>
+
+        <div class="pay-later-container">
+            <input type="checkbox" id="payLaterCheckbox" onchange="togglePayLater()">
+            <label for="payLaterCheckbox">Pay after session ends</label>
+        </div>
+
+        <div class="payment-inputs" id="paymentInputs">
+            <label>Cash Payment (₾):</label>
+            <input type="number" id="cashPayment" step="0.1" min="0" value="0" oninput="updateCardPayment()">
+            
+            <label>Card Payment (₾):</label>
+            <input type="number" id="cardPayment" step="0.1" min="0" value="0" oninput="updateCashPayment()">
+            
+            <div class="total-amount" id="paymentTotal">Total: ₾ 0.00</div>
+        </div>
+
+        <div class="button-group">
+            <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+            <button class="start-btn" onclick="startRental()">Start</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="shopOverlay"></div>
+    <div class="popup" id="shopWindow">
+        <h2>Shop</h2>
+        
+        <div class="shop-search">
+            <input type="text" id="shopSearchInput" placeholder="Search items..." oninput="filterShopItems()">
+        </div>
+        
+        <div class="shop-items-container" id="shopItemsContainer"></div>
+        
+        <div class="shop-summary">
+            <div class="shop-total" id="shopTotal">Total: ₾ 0.00</div>
+            
+            <div class="payment-timing">
+                <label class="payment-option">
+                    <input type="radio" name="shopPaymentTiming" value="now" checked>
+                    <span>Pay Now</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="shopPaymentTiming" value="later">
+                    <span>Pay After Session</span>
+                </label>
+            </div>
+            
+            <div class="payment-methods" id="paymentMethods">
+                <div class="payment-method">
+                    <input type="radio" id="paymentCash" name="shopPaymentMethod" value="cash" checked>
+                    <label for="paymentCash">Cash</label>
+                </div>
+                <div class="payment-method">
+                    <input type="radio" id="paymentCard" name="shopPaymentMethod" value="card">
+                    <label for="paymentCard">Card</label>
+                </div>
+                <div class="payment-method">
+                    <input type="radio" id="paymentBoth" name="shopPaymentMethod" value="both">
+                    <label for="paymentBoth">Both</label>
+                </div>
+            </div>
+            
+            <div id="splitPaymentContainer" style="display: none;">
+                <div class="split-payment">
+                    <label>Cash Amount: ₾</label>
+                    <input type="number" id="shopCashAmount" min="0" step="0.1" value="0" oninput="validateSplitPayment()">
+                </div>
+                <div class="split-payment">
+                    <label>Card Amount: ₾</label>
+                    <input type="number" id="shopCardAmount" min="0" step="0.1" value="0" oninput="validateSplitPayment()">
+                </div>
+                <div class="payment-summary" id="splitPaymentSummary">
+                    Total: ₾0.00 (Remaining: ₾0.00)
+                </div>
+            </div>
+            
+            <div class="shop-action-buttons">
+                <button class="cancel-btn" onclick="closeShopWindow()">Cancel</button>
+                <button class="confirm-btn" onclick="processShopPurchase()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="endDayOverlay"></div>
+    <div class="popup" id="endDayPopup">
+        <h2>End Day</h2>
+        <div class="form-group">
+            <label>Cash to Leave in Safe (₾):</label>
+            <input type="number" id="cashToLeave" step="0.1" min="0" value="0">
+        </div>
+        <div class="button-group">
+            <button class="cancel-btn" onclick="closeEndDayPopup()">Cancel</button>
+            <button class="start-btn" onclick="confirmEndDay()">Confirm</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="editBalanceOverlay"></div>
+    <div class="popup" id="editBalancePopup">
+        <h2>Edit Balance</h2>
+        <div class="form-group">
+            <label>Select Balance to Edit:</label>
+            <select id="balanceType">
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>New Amount (₾):</label>
+            <input type="number" id="newBalanceAmount" step="0.1" min="0" value="0">
+        </div>
+        <div class="button-group">
+            <button class="cancel-btn" onclick="closeEditBalancePopup()">Cancel</button>
+            <button class="start-btn" onclick="saveBalance()">Save</button>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="paymentOverlay"></div>
+    <div class="popup" id="paymentPopup">
+        <h2>Payment</h2>
+        <div class="form-group">
+            <label>Amount Due (₾):</label>
+            <input type="text" id="paymentAmount" readonly>
+        </div>
+        <div class="payment-inputs">
+            <label>Cash Payment (₾):</label>
+            <input type="number" id="paymentCashAmount" step="0.1" min="0" value="0" oninput="updatePaymentCardAmount()">
+            
+            <label>Card Payment (₾):</label>
+            <input type="number" id="paymentCardAmount" step="0.1" min="0" value="0" oninput="updatePaymentCashAmount()">
+            
+            <div class="total-amount" id="paymentTotalAmount">Total: ₾ 0.00</div>
+        </div>
+        <div class="button-group">
+            <button class="cancel-btn" onclick="closePaymentPopup()">Cancel</button>
+            <button class="confirm-btn" onclick="confirmPayment()">Confirm</button>
+        </div>
+    </div>
+    <div id="paymentOverlay"></div>
+<div id="paymentPopup">
+    <h2>Complete Payment</h2>
+    <div id="paymentTypeIndicator"></div>
+    
+    <div class="form-group">
+        <label>Amount Due:</label>
+        <input type="text" id="paymentAmount" readonly>
+    </div>
+    
+    <div class="form-group">
+        <label>Cash Payment (₾):</label>
+        <input type="number" id="paymentCashAmount" step="0.01" min="0" oninput="updatePaymentCardAmount()">
+    </div>
+    
+    <div class="form-group">
+        <label>Card Payment (₾):</label>
+        <input type="number" id="paymentCardAmount" step="0.01" min="0" oninput="updatePaymentCashAmount()">
+    </div>
+    
+    <div id="paymentTotalAmount" class="total-amount">Total: ₾0.00</div>
+    
+    <div class="button-group">
+        <button class="cancel-btn" onclick="closePaymentPopup()">Cancel</button>
+        <button class="confirm-btn" onclick="confirmPayment()">Confirm Payment</button>
+    </div>
+</div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

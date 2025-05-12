@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gameroom stock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            background: #1e3a8a;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+        }
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .search-container input {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            width: 250px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .search-container input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        .search-container button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .search-container button:hover {
+            background-color: #45a049;
+        }
+        .top-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px;
+            gap: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button.danger {
+            background-color: #f44336;
+        }
+        button.danger:hover {
+            background-color: #d32f2f;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .status-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            display: none;
+            z-index: 1000;
+        }
+        .status-message.error {
+            background-color: #f44336;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .modal-header .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        @media screen and (max-width: 768px) {
+            .search-container input {
+                width: 100%;
+            }
+            .top-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .modal-content {
+                width: 90%;
+            }
+        }
+        .invis{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar">
+        <div class="logo" onclick="redirectToDashboard()">Gameroom</div>
+        <div class="nav-links">
+            <a href="./stock.html" class="active">STOCK</a>
+            <a href="./history.html">HISTORY</a>
+            <a href="./shop.html">SHOP</a>
+            <a href="./config.html">CONFIG</a>
+            <a href="./controll.html" class="invis" id="ctrl">Controll</a>
+        </div>
+        <div class="user-info">
+            <span id="username-display"></span>
+            <button onclick="logout()" class="logout-btn">→</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="top-controls">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search items...">
+                <button onclick="searchTable()">Search</button>
+            </div>
+            <button id="refreshStockBtn">Refresh Stock</button>
+        </div>
+
+        <!-- Stock Table -->
+        <table id="stockTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="stockTableBody">
+                <!-- Table rows will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Status Message -->
+    <div id="statusMessage" class="status-message"></div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit All Items</h2>
+                <button class="close-btn" onclick="closeEditModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="editTableBody">
+                        <!-- Editable rows will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button onclick="saveChanges()">Save</button>
+                <button onclick="closeEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      // Global variable to store stock data
+// Global variable to store stock data
+let stockData = [];
+
+// DOM elements
+const stockTableBody = document.getElementById("stockTableBody");
+const searchInput = document.getElementById("searchInput");
+const refreshStockBtn = document.getElementById("refreshStockBtn");
+const editModal = document.getElementById("editModal");
+const editTableBody = document.getElementById("editTableBody");
+const statusMessage = document.getElementById("statusMessage");
+
+// Initialize the application
+function init() {
+    loadStockData();
+    setupEventListeners();
+}
+const username = localStorage.getItem('username');
+document.getElementById('username-display').textContent = username;
+if(username === "Gega") {
+    object = document.getElementById("ctrl")
+    object.classList.remove('invis');
+       
+} 
+// Load stock data from API or localStorage
+async function loadStockData() {
+    try {
+        // Try to fetch from API first
+        const response = await fetch('https://ubanze.bsite.net/api/products/all');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const apiData = await response.json();
+        stockData = apiData.map(product => ({
+            item: product.name,
+            price: product.price,
+            quantity: product.stockQuantity
+        }));
+
+        localStorage.setItem('stockData', JSON.stringify(stockData));
+        renderStockItems();
+        showStatus('Stock data loaded successfully');
+    } catch (error) {
+        console.error('Error loading from API:', error);
+        
+        // Fallback to localStorage
+        try {
+            const localData = localStorage.getItem('stockData');
+            if (localData) {
+                stockData = JSON.parse(localData);
+                renderStockItems();
+                showStatus('Using locally saved data', 'warning');
+            } else {
+                throw new Error('No stock data available');
+            }
+        } catch (localError) {
+            console.error('Local storage error:', localError);
+            showStatus('Failed to load stock data', 'error');
+        }
+    }
+}
+
+// Render stock items in the table
+function renderStockItems() {
+    stockTableBody.innerHTML = stockData.map((item, index) => `
+        <tr>
+            <td>${item.item}</td>
+            <td>₾${item.price.toFixed(2)}</td>
+            <td>${item.quantity}</td>
+            <td>
+                <button class="button danger" onclick="removeStockItem(${index})">Remove</button>
+            </td>
+        </tr>
+    `).join("");
+}
+
+// Remove stock item
+async function removeStockItem(index) {
+    const productToRemove = stockData[index];
+    if (!productToRemove) {
+        showStatus('Product not found', 'error');
+        return;
+    }
+
+    // Get clean product name (remove anything after space)
+    const productName = productToRemove.item.split(' ')[0];
+    
+    // Show confirmation with product name
+    if (!confirm(`Are you sure you want to remove ${productName}?`)) {
+        return;
+    }
+
+    try {
+        // Try POST request first (more reliable)
+        let response = await fetch(
+            'https://ubanze.bsite.net/api/products/remove',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productName: productName
+                })
+            }
+        );
+
+        // If POST fails with 405, try DELETE
+        if (response.status === 405) {
+            response = await fetch(
+                `https://ubanze.bsite.net/api/products/remove/${encodeURIComponent(productName)}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+        }
+
+        // Update local data
+        stockData.splice(index, 1);
+        localStorage.setItem('stockData', JSON.stringify(stockData));
+        renderStockItems();
+        
+        showStatus(`${productName} removed successfully`);
+    } catch (error) {
+        console.error('Remove failed:', error);
+        showStatus(`Failed to remove ${productName}: ${error.message}`, 'error');
+    }
+}
+
+// Search functionality
+function searchTable() {
+    const filter = searchInput.value.toUpperCase();
+    const rows = stockTableBody.getElementsByTagName("tr");
+
+    for (let row of rows) {
+        const nameCell = row.querySelector("td:first-child");
+        if (nameCell) {
+            const txtValue = nameCell.textContent || nameCell.innerText;
+            row.style.display = txtValue.toUpperCase().includes(filter) ? "" : "none";
+        }
+    }
+}
+
+// Edit modal functions
+function openEditModal() {
+    editTableBody.innerHTML = stockData.map(item => `
+        <tr>
+            <td><input type="text" value="${item.item}" disabled></td>
+            <td><input type="number" step="0.01" value="${item.price}"></td>
+            <td><input type="number" value="${item.quantity}"></td>
+        </tr>
+    `).join("");
+    
+    editModal.style.display = "flex";
+}
+
+function closeEditModal() {
+    editModal.style.display = "none";
+}
+
+function saveChanges() {
+    try {
+        const rows = editTableBody.getElementsByTagName("tr");
+        
+        stockData = stockData.map((item, index) => {
+            const inputs = rows[index].getElementsByTagName("input");
+            return {
+                ...item,
+                price: parseFloat(inputs[1].value),
+                quantity: parseInt(inputs[2].value)
+            };
+        });
+        
+        localStorage.setItem('stockData', JSON.stringify(stockData));
+        renderStockItems();
+        closeEditModal();
+        showStatus('Changes saved successfully');
+    } catch (error) {
+        console.error('Error saving changes:', error);
+        showStatus('Failed to save changes', 'error');
+    }
+}
+
+// Show status message
+function showStatus(message, type = 'success') {
+    statusMessage.textContent = message;
+    statusMessage.className = `status-message ${type}`;
+    statusMessage.style.display = 'block';
+    
+    setTimeout(() => {
+        statusMessage.style.display = 'none';
+    }, 3000);
+}
+
+// Set up event listeners
+function setupEventListeners() {
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') searchTable();
+    });
+    
+    refreshStockBtn.addEventListener('click', loadStockData);
+    
+    document.querySelector('.close-btn').addEventListener('click', closeEditModal);
+}
+function redirectToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+// Initialize the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

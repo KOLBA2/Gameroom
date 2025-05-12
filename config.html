@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - GameRoom</title>
+    <link rel="stylesheet" href="config.css">
+ 
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo" onclick="redirectToDashboard()">Gameroom</div>
+        <div class="nav-links">
+            <a href="./stock.html">STOCK</a>
+            <a href="./history.html">HISTORY</a>
+            <a href="./shop.html">SHOP</a>
+            <a href="./config.html" class="" >CONFIG</a>
+            <a href="./controll.html" class="invis" id="ctrl">Controll</a>
+        </div>
+        <div class="user-info">
+            <span id="username-display"></span>
+            <button onclick="logout()" class="logout-btn">→</button>
+        </div>
+    </nav>
+
+    <main>
+        <h1>Configuration</h1>
+
+        <!-- Rental Types Configuration -->
+
+        <!-- Stock Items Configuration -->
+        <div class="section">
+            <h2>Stock Items</h2>
+            <div class="form-group">
+                <label for="stockItemName">Item Name:</label>
+                <input type="text" id="stockItemName" placeholder="Enter item name">
+            </div>
+            <div class="form-group">
+                <label for="stockItemPrice">Item Price:</label>
+                <input type="number" id="stockItemPrice" placeholder="Enter item price">
+            </div>
+            <div class="form-group">
+                <label for="stockItemPrice">Item quantity:</label>
+                <input type="number" id="quantityitem" placeholder="Enter item quantity">
+            </div>
+            <button class="button primary" onclick="addStockItem()">Add Stock Item</button>
+
+            <div class="list" id="stockItemsList"></div>
+        </div>
+
+    </main>
+
+    <script src="config.js"></script>
+</body>
+</html>

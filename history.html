@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubanze - History</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="history.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" onclick="redirectToDashboard()">Gameroom</div>
+        <div class="nav-links">
+            <a href="./stock.html">STOCK</a>
+            <a href="./history.html" class="active">HISTORY</a>
+            <a href="./shop.html">SHOP</a>
+            <a href="./config.html">CONFIG</a>
+            <a href="./controll.html" class="invis" id="ctrl">Controll</a>
+        </div>
+        <div class="user-info">
+            <span id="username-display"></span>
+            <button onclick="logout()" class="logout-btn">→</button>
+        </div>
+    </nav>
+
+    <main>
+        <h1>History</h1>
+        <div class="filters">
+            <button onclick="filterHistory('all')" class="active">All</button>
+            <button onclick="filterHistory('game')">Game Sessions</button>
+            <button onclick="filterHistory('admin')">Admin Edits</button>
+        </div>
+        <div class="calendar-container">
+            <input type="text" id="startDateInput" placeholder="Start Date">
+            <input type="text" id="endDateInput" placeholder="End Date">
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by date, type, or items..." oninput="searchHistory()">
+            <button onclick="clearSearch()">Clear</button>
+        </div>
+        <table id="historyTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Duration</th>
+                    <th>Price (₾)</th>
+                    <th>Items Purchased</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- History rows will be populated here -->
+            </tbody>
+        </table>
+        <div id="noDataMessage" class="no-data">No history available.</div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="history.js"></script>
+</body>
+</html>
